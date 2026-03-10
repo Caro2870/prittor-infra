@@ -1,7 +1,7 @@
 # ── prittor.com ──────────────────────────────────────────────
 prittor.com, www.prittor.com {
   encode zstd gzip
-  reverse_proxy finanzas-portfolio-prod:80
+  reverse_proxy portafolio-app:80
 }
 
 # ── finanzas ─────────────────────────────────────────────────
@@ -14,10 +14,16 @@ finanzas.prittor.com, sam.prittor.com, caro.prittor.com, jessica.prittor.com, de
   reverse_proxy finanzas-frontend-prod:80
 }
 
-# ── ecommerce ─────────────────────────────────────────────────
+# ── jessica nails (landing) ───────────────────────────────────
 shop.prittor.com, tienda.prittor.com {
   encode zstd gzip
-  reverse_proxy finanzas-ecommerce-prod:80
+  reverse_proxy jessica-nails-app:80
+}
+
+# ── ecommerce nails (Laravel) ────────────────────────────────
+nails.prittor.com {
+  encode zstd gzip
+  reverse_proxy ecommerce-nails-app:9000
 }
 
 # ── atiende ───────────────────────────────────────────────────
