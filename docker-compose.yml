@@ -1,0 +1,24 @@
+services:
+  caddy:
+    image: caddy:2.8
+    container_name: prittor-caddy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    networks:
+      - prittor-proxy
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+networks:
+  prittor-proxy:
+    name: prittor-proxy
+    driver: bridge

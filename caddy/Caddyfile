@@ -1,0 +1,27 @@
+# ── prittor.com ──────────────────────────────────────────────
+prittor.com, www.prittor.com {
+  encode zstd gzip
+  reverse_proxy finanzas-portfolio-prod:80
+}
+
+# ── finanzas ─────────────────────────────────────────────────
+finanzas.prittor.com, sam.prittor.com, caro.prittor.com, jessica.prittor.com, demo.prittor.com {
+  encode zstd gzip
+
+  @api path /api*
+  reverse_proxy @api finanzas-backend-prod:3000
+
+  reverse_proxy finanzas-frontend-prod:80
+}
+
+# ── ecommerce ─────────────────────────────────────────────────
+shop.prittor.com, tienda.prittor.com {
+  encode zstd gzip
+  reverse_proxy finanzas-ecommerce-prod:80
+}
+
+# ── atiende ───────────────────────────────────────────────────
+atiende.prittor.com {
+  encode zstd gzip
+  reverse_proxy atiende-atiende-1:3000
+}
