@@ -23,7 +23,7 @@ shop.prittor.com, tienda.prittor.com {
 # ── ecommerce nails (Laravel) ────────────────────────────────
 nails.prittor.com {
   encode zstd gzip
-  reverse_proxy ecommerce-nails-app:9000
+  reverse_proxy ecommerce-nails-web:80
 }
 
 # ── atiende ───────────────────────────────────────────────────
