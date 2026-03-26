@@ -1,33 +1,139 @@
+# ── Global rate limit ───────────────────────────────────────
+{
+  order rate_limit before basicauth
+}
+
+# ── Security headers (global snippet) ───────────────────────
+(security_headers) {
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "strict-origin-when-cross-origin"
+    Permissions-Policy "camera=(), geolocation=()"
+    -Server
+  }
+}
+
+# ── Rate limiting snippets ──────────────────────────────────
+(rate_limit_api) {
+  rate_limit {
+    zone api_zone {
+      key {client.ip}
+      events 60
+      window 1m
+    }
+  }
+}
+
+(rate_limit_page) {
+  rate_limit {
+    zone page_zone {
+      key {client.ip}
+      events 120
+      window 1m
+    }
+  }
+}
+
 # ── prittor.com ──────────────────────────────────────────────
-prittor.com, www.prittor.com {
+www.prittor.com {
+  redir https://prittor.com{uri} permanent
+}
+
+prittor.com {
+  import security_headers
+  import rate_limit_page
   encode zstd gzip
+  header Link `<https://prittor.com{uri}>; rel="canonical"`
   reverse_proxy portafolio-app:80
 }
 
 # ── finanzas ─────────────────────────────────────────────────
 finanzas.prittor.com, sam.prittor.com, caro.prittor.com, jessica.prittor.com, demo.prittor.com {
+  import security_headers
   encode zstd gzip
+  header Link `<https://{host}{uri}>; rel="canonical"`
 
   @api path /api*
-  reverse_proxy @api finanzas-backend-prod:3000
+  route @api {
+    import rate_limit_api
+    reverse_proxy finanzas-backend-prod:3000
+  }
 
+  import rate_limit_page
   reverse_proxy finanzas-frontend-prod:80
 }
 
 # ── jessica nails (landing) ───────────────────────────────────
-shop.prittor.com, tienda.prittor.com {
+tienda.prittor.com {
+  redir https://shop.prittor.com{uri} permanent
+}
+
+shop.prittor.com {
+  import security_headers
   encode zstd gzip
+  header Link `<https://shop.prittor.com{uri}>; rel="canonical"`
   reverse_proxy jessica-nails-app:80
 }
 
 # ── ecommerce nails (Laravel) ────────────────────────────────
 nails.prittor.com {
+  import security_headers
+  import rate_limit_page
   encode zstd gzip
+  header Link `<https://nails.prittor.com{uri}>; rel="canonical"`
   reverse_proxy ecommerce-nails-web:80
+}
+
+# ── prittor studio ─────────────────────────────────────────────
+studio.prittor.com {
+  import security_headers
+  import rate_limit_page
+  encode zstd gzip
+  header Link `<https://studio.prittor.com{uri}>; rel="canonical"`
+  reverse_proxy prittor-studio-app:80
+}
+
+# ── llm visualizer ────────────────────────────────────────────
+llm.prittor.com {
+  import security_headers
+  import rate_limit_page
+  encode zstd gzip
+  header Link `<https://llm.prittor.com{uri}>; rel="canonical"`
+  reverse_proxy llm-visualizer-app-1:3000
 }
 
 # ── atiende ───────────────────────────────────────────────────
 atiende.prittor.com {
+  import security_headers
   encode zstd gzip
+  header Link `<https://atiende.prittor.com{uri}>; rel="canonical"`
   reverse_proxy atiende-atiende-1:3000
+}
+
+# ── elecciones peru 2026 ────────────────────────────────────
+elecciones.prittor.com {
+  import security_headers
+  encode zstd gzip
+  header Link `<https://elecciones.prittor.com{uri}>; rel="canonical"`
+  reverse_proxy elecciones-app:3000
+}
+
+# ── voice notes ──────────────────────────────────────────────
+voice.prittor.com {
+  import security_headers
+  import rate_limit_api
+  encode zstd gzip
+  header Link `<https://voice.prittor.com{uri}>; rel="canonical"`
+  reverse_proxy voice-notes-app:3000
+}
+
+# ── umami analytics ──────────────────────────────────────────
+analytics.prittor.com {
+  import security_headers
+  import rate_limit_page
+  encode zstd gzip
+  header Link `<https://analytics.prittor.com{uri}>; rel="canonical"`
+  reverse_proxy umami-app:3000
 }
