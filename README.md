@@ -33,3 +33,15 @@ docker compose up -d
 ```bash
 docker network connect prittor-proxy <nombre-contenedor>
 ```
+
+## Proyectos enrutados
+
+| Proyecto | Subdominio | Contenedor | Repo |
+|---|---|---|---|
+| Portafolio | prittor.com / www | portafolio-app | Caro2870/portafolio-2026 |
+| Finanzas | finanzas/caro/sam/jessica/demo.prittor.com | finanzas-backend-prod, finanzas-frontend-prod | Caro2870/finanzas |
+| Atiende | atiende.prittor.com | atiende-atiende-1 | Caro2870/atiende |
+| Jessica Nails | shop/tienda.prittor.com | jessica-nails-app | Caro2870/jessica-nails |
+| Ecommerce Nails | nails.prittor.com | ecommerce-nails-app | Caro2870/ecommerce-nails |
+| LLM Visualizer | llm.prittor.com | llm-visualizer-app-1 | Caro2870/llm-visualizer |
+| Voice Notes | voice.prittor.com | voice-notes-app | Caro2870/voice-notes |
